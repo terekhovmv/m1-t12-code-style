@@ -13,16 +13,17 @@ public class DepositInfo {
         return name;
     }
 
-    public double calculateTotal(double initialAmount, int periodInYears, boolean withCapitalization) {
-        double total;
+    public double calculateTotal(double initialAmount,
+                                 int periodInYears, boolean withCapitalization) {
+        double result;
 
         if (withCapitalization) {
-            total = initialAmount * Math.pow((1 + yearRate / 12), 12 * periodInYears);
+            result = initialAmount * Math.pow((1 + yearRate / 12), 12 * periodInYears);
         } else {
-            total = initialAmount + initialAmount * yearRate * periodInYears;
+            result = initialAmount + initialAmount * yearRate * periodInYears;
         }
 
-        return round(total, 2);
+        return round(result, 2);
     }
 
     private double round(double value, int places) {
