@@ -1,40 +1,52 @@
-import java.net.URI;import java.util.Scanner;import java.io.IOException;
+import java.util.Objects;
 
-public class calculate_deposit
-{
-double Calculate_Complex_Percent_Function(double a, double y,int d ) {
-       double pay = a * Math.pow((1 + y/ 12), 12 *d);
-          return rnd(pay, 2);
-  } double Calculate_Simple_Percent_Function(double doubleAmount,double double_year_rate, int deposit_period) {
-         return rnd(doubleAmount+doubleAmount * double_year_rate *deposit_period, 2);
-    } double rnd(double value
-  ,int places) {
-       double ScaLe= Math.pow
-          (10, places);
-       return Math.round(value*ScaLe)
-            /ScaLe; }
+public class DepositInfo {
+    private final String name;
+    private final double yearRate;
 
-    void do_important_job( )
-    {
-      int period, action ;
-        Scanner abcdef = new Scanner(System.in); System.out.println("Введите сумму вклада в рублях:") ;
-      int amount = abcdef.nextInt(); System.out.println("Введите срок вклада в годах:") ;
-        period = abcdef.nextInt( );
-      System.out.println   (   "Выберите тип вклада, 1 - вклад с обычным процентом, 2 - вклад с капитализацией:");
-        action = abcdef.nextInt();
-        double outDoubleVar = 0;
-        if (action ==1) outDoubleVar = Calculate_Simple_Percent_Function(amount, 0.06, period);
-        else if (action == 2)
-        {
-            outDoubleVar = Calculate_Complex_Percent_Function(amount, 0.06, period); }
-        System.out.println("Результат вклада: " + amount + " за " + period + " лет превратятся в " + outDoubleVar);
+    public DepositInfo(String name, double yearRate) {
+        this.name = name;
+        this.yearRate = yearRate;
     }
-public static void main(String[] args)
-    {
-        new calculate_deposit().do_important_job();
-}
 
+    public String getName() {
+        return name;
+    }
 
+    public double calculateTotal(double initialAmount, int periodInYears, boolean withCapitalization) {
+        double total;
 
+        if (withCapitalization) {
+            total = initialAmount * Math.pow((1 + yearRate / 12), 12 * periodInYears);
+        } else {
+            total = initialAmount + initialAmount * yearRate * periodInYears;
+        }
 
+        return round(total, 2);
+    }
+
+    private double round(double value, int places) {
+        double scale = Math.pow(10, places);
+        return Math.round(value * scale) / scale;
+    }
+
+    @Override
+    public boolean equals(Object otherObject) {
+        if (this == otherObject) return true;
+        if (otherObject == null) return false;
+        if (!(otherObject instanceof DepositInfo)) return false;
+
+        DepositInfo other = (DepositInfo) otherObject;
+        return Double.compare(yearRate, other.yearRate) == 0 && Objects.equals(name, other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, yearRate);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("DepositInfo{name='%s', yearRate=%.4f}", name, yearRate);
+    }
 }
